@@ -1,0 +1,9 @@
+main: me.chickenstyle.backpack.FancyBags
+name: FancyBags
+version: 1.6.3
+description: implements cool backpacks to the game 
+api-version: 1.13
+commands:
+  fancybags: 
+    aliases: fb
+    description: Plugin's main command
