@@ -57,25 +57,30 @@ public class ClickInventoryEvent implements Listener{
 					if (!pack.getReject().getItems().isEmpty()) {
 						if (pack.getReject().getType().equals(RejectType.BLACKLIST)) {
 							for (ItemStack item:pack.getReject().getItems()) {
-								if (item.isSimilar(e.getCurrentItem())) {
-									e.setCancelled(true);
-									player.sendMessage(Message.DISABLE_PLACE.getMSG());
-									break;
+								
+								if (!FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
+									if (isSimilar(item,e.getCurrentItem())) {
+										e.setCancelled(true);
+										player.sendMessage(Message.DISABLE_PLACE.getMSG());
+										break;
+									}
 								}
+
 						  }
 					}
 					
 					if (pack.getReject().getType().equals(RejectType.WHITELIST)) {
 							boolean contains = false;
 							for (ItemStack item:pack.getReject().getItems()) {
-								if (item.isSimilar(e.getCurrentItem())) {
+								if (isSimilar(item,e.getCurrentItem())) {
 									contains = true;
 								}
 							}
-							
-							if (contains == false) {
-								e.setCancelled(true);
-								player.sendMessage(Message.DISABLE_PLACE.getMSG());
+							if (!FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
+								if (contains == false) {
+									e.setCancelled(true);
+									player.sendMessage(Message.DISABLE_PLACE.getMSG());
+								}
 							}
 						}
 					}
@@ -246,4 +251,63 @@ public class ClickInventoryEvent implements Listener{
 		
 
 	}
+	
+	@SuppressWarnings("deprecation")
+	public static boolean isSimilar(ItemStack a, ItemStack b) {
+		
+		
+	    if(a == null || b == null)
+	        return false;
+	    
+	    if(a.getType() != b.getType())
+	        return false;
+
+		if (Bukkit.getVersion().contains("1.8") ||
+			Bukkit.getVersion().contains("1.9") ||
+			Bukkit.getVersion().contains("1.10")||
+			Bukkit.getVersion().contains("1.11")||
+			Bukkit.getVersion().contains("1.12")) {
+			ItemStack item = new ItemStack(b.getType(),1,b.getData().getData());
+			
+			if (!item.getType().isBlock()) {
+				item.setDurability((short) 0);
+				
+				
+				if (a.getData().getData() != item.getData().getData()) {
+					return false;
+				} 
+			} else {
+				if (a.getData().getData() != item.getData().getData()) {
+					return false;
+				} 
+			}
+			
+			
+		}
+	    
+
+	    ItemMeta first = a.getItemMeta();
+	    ItemMeta second = b.getItemMeta();
+	    
+
+	    if (first.hasDisplayName() != second.hasDisplayName())
+	    	return false;
+	    
+	    if (first.hasDisplayName() && second.hasDisplayName()) {
+		    if (!first.getDisplayName().equals(second.getDisplayName()))
+		    	return false;
+	    }
+	    
+	    
+	    if (first.hasLore() && second.hasLore()) {
+		    if (!first.getLore().equals(second.getLore())) 
+		    	return false;
+	    }
+	    
+	    if (!first.getEnchants().equals(second.getEnchants()))
+	    	return false;  
+	    
+	    return true;
+	}
+	
 }

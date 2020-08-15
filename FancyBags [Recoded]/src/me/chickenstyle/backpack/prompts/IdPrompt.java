@@ -13,7 +13,7 @@ public class IdPrompt extends NumericPrompt{
 
 	@Override
 	public String getPromptText(ConversationContext context) {
-		return Utils.color("&7Lets start creating new backpack! \nEnter a &6unique &7backpack id.");
+		return Utils.color("&7Lets start creating new backpack! \nEnter a &6unique &7backpack id. (Should be a number!)");
 			
 	}
 
