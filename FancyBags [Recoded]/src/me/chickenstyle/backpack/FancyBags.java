@@ -11,6 +11,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -22,6 +23,7 @@ import me.chickenstyle.backpack.events.ClickInventoryEvent;
 import me.chickenstyle.backpack.events.CloseInventoryEvent;
 import me.chickenstyle.backpack.events.CraftEvent;
 import me.chickenstyle.backpack.events.RightClickEvent;
+import me.chickenstyle.backpack.utilsfolder.Utils;
 import me.chickenstyle.backpack.versions.Handler_1_10_R1;
 import me.chickenstyle.backpack.versions.Handler_1_11_R1;
 import me.chickenstyle.backpack.versions.Handler_1_12_R1;
@@ -36,6 +38,10 @@ import me.chickenstyle.backpack.versions.Handler_1_8_R2;
 import me.chickenstyle.backpack.versions.Handler_1_8_R3;
 import me.chickenstyle.backpack.versions.Handler_1_9_R1;
 import me.chickenstyle.backpack.versions.Handler_1_9_R2;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 
 
@@ -71,6 +77,19 @@ public class FancyBags extends JavaPlugin implements Listener{
 		
 		loadListeners();
 		loadRecipes();
+		
+		if (!Bukkit.getVersion().contains("1.8") &&
+			!Bukkit.getVersion().contains("1.9") &&
+			!Bukkit.getVersion().contains("1.10")) {
+	        new UpdateChecker(this, 79997).getVersion(version -> {
+	            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+	                getServer().getConsoleSender().sendMessage(Utils.color("&aFancyBags >> You are using the latest version of the plugin!"));
+	            } else {
+	            	getServer().getConsoleSender().sendMessage(Utils.color("&cFancyBags >> You are using an outdated version of the plugin!\nYour version is: &b" +  getDescription().getVersion() + "\n&cThe latest version is: &a" + version));
+	            }
+	        });
+		}
+		
 		
 		//Getting data
         int pluginId = 8024;
@@ -109,6 +128,30 @@ public class FancyBags extends JavaPlugin implements Listener{
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent e) {
 		if (creatingBackpack.containsKey(e.getPlayer().getUniqueId())) creatingBackpack.remove(e.getPlayer().getUniqueId());
+	}
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		if (!Bukkit.getVersion().contains("1.8") &&
+			!Bukkit.getVersion().contains("1.9") &&
+			!Bukkit.getVersion().contains("1.10")) {
+			if (e.getPlayer().isOp()) {
+				
+				TextComponent message = new TextComponent("Click me");
+				message.setClickEvent( new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/%E2%9A%A1-fancybags-%E2%9A%A1-new-way-to-store-items-1-8-1-16-2.79997/" ) );
+				message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Utils.color("&7Click here to download the latest version of the plugin!")).create()));
+				message.setColor(net.md_5.bungee.api.ChatColor.GOLD);
+				
+				
+		        new UpdateChecker(this, 79997).getVersion(version -> {
+		            if (!this.getDescription().getVersion().equalsIgnoreCase(version)) {
+		            	e.getPlayer().sendMessage(Utils.color("&cFancyBags >> You are using an outdated version of the plugin!\nlatest version is : &a" + version));
+		            	e.getPlayer().spigot().sendMessage(message);
+		            }
+		        });
+			}
+		}
+
 	}
 	
 	public boolean getServerVersion() {

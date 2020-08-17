@@ -103,9 +103,6 @@ public class CustomBackpacks {
     			config.set(path + ".ingredients", "none");
 			}
 
-    		
-    		
-    		
     		config.set(path + ".rejectItems.rejects", pack.getReject().isRejecting());
     		config.set(path + ".rejectItems.rejectType", pack.getReject().getType().toString());
     		config.set(path + ".rejectItems.items", pack.getReject().getItems());
@@ -164,9 +161,12 @@ public class CustomBackpacks {
 		
 		boolean reject = config.getBoolean(path + ".rejectItems.rejects");
 		RejectType type = RejectType.valueOf(config.getString(path + ".rejectItems.rejectType"));
-		ArrayList<ItemStack> items = (ArrayList<ItemStack>) config.get(path + ".rejectItems.items");
-		
-		
+		ArrayList<ItemStack> items;
+		if (config.get(path + ".rejectItems.items") != null) {
+			items = (ArrayList<ItemStack>) config.get(path + ".rejectItems.items");
+		} else {
+			items = new ArrayList<ItemStack>();
+		}
 		
 		return new Backpack(id, name, texture, slotsAmount, new RejectItems(reject, type, items), recipe);
     }

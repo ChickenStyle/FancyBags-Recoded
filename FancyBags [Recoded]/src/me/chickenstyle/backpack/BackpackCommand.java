@@ -42,8 +42,6 @@ public class BackpackCommand implements CommandExecutor {
 							player.sendMessage(Message.NO_PERMISSION.getMSG());
 						}
 					}
-					
-
 
 				break;
 				
