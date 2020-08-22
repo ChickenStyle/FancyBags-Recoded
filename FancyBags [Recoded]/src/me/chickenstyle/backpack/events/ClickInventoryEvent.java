@@ -47,47 +47,47 @@ public class ClickInventoryEvent implements Listener{
 			if (FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
 				e.setCancelled(true);
 				player.sendMessage(Message.DISABLE_PLACE.getMSG());
+				return;
 			}
-			
-			if (CustomBackpacks.getBackpack(FancyBags.getVersionHandler().getBackpackID(player.getItemInHand())) != null) {
-				int id = FancyBags.getVersionHandler().getBackpackID(player.getItemInHand());
-				Backpack pack = CustomBackpacks.getBackpack(id);
-				
-				if (pack.getReject().isRejecting()) {
-					if (!pack.getReject().getItems().isEmpty()) {
-						if (pack.getReject().getType().equals(RejectType.BLACKLIST)) {
-							for (ItemStack item:pack.getReject().getItems()) {
-								
-								if (!FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
+				if (CustomBackpacks.hasBackpack(FancyBags.getVersionHandler().getBackpackID(player.getItemInHand()))) {
+					int id = FancyBags.getVersionHandler().getBackpackID(player.getItemInHand());
+					Backpack pack = CustomBackpacks.getBackpack(id);
+					
+					if (pack.getReject().isRejecting()) {
+						if (!pack.getReject().getItems().isEmpty()) {
+							if (pack.getReject().getType().equals(RejectType.BLACKLIST)) {
+								for (ItemStack item:pack.getReject().getItems()) {
+									
+									if (!FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
+										if (isSimilar(item,e.getCurrentItem())) {
+											e.setCancelled(true);
+											player.sendMessage(Message.DISABLE_PLACE.getMSG());
+											break;
+										}
+									}
+
+							  }
+						}
+						
+						if (pack.getReject().getType().equals(RejectType.WHITELIST)) {
+								boolean contains = false;
+								for (ItemStack item:pack.getReject().getItems()) {
 									if (isSimilar(item,e.getCurrentItem())) {
-										e.setCancelled(true);
-										player.sendMessage(Message.DISABLE_PLACE.getMSG());
-										break;
+										contains = true;
 									}
 								}
-
-						  }
-					}
-					
-					if (pack.getReject().getType().equals(RejectType.WHITELIST)) {
-							boolean contains = false;
-							for (ItemStack item:pack.getReject().getItems()) {
-								if (isSimilar(item,e.getCurrentItem())) {
-									contains = true;
-								}
-							}
-							if (!FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
-								if (contains == false) {
-									e.setCancelled(true);
-									player.sendMessage(Message.DISABLE_PLACE.getMSG());
+								if (!FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
+									if (contains == false) {
+										e.setCancelled(true);
+										player.sendMessage(Message.DISABLE_PLACE.getMSG());
+									}
 								}
 							}
 						}
-					}
+					}	
 				}
-				
-				
-			}
+
+
 			
 			
 			
