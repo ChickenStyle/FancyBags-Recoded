@@ -33,7 +33,7 @@ public class RightClickEvent implements Listener{
 			if (FancyBags.getVersionHandler().hasInventoryTag(e.getItem())) {
 				Player player = e.getPlayer();
 				e.setCancelled(true);
-				player.playSound(player.getLocation(), Utils.getVersionChestSound(), 1f, 1f);
+				player.playSound(player.getLocation(), Utils.getVersionChestOpenSound(), (float) FancyBags.getInstance().getConfig().getDouble("soundLevelOfBackpacks"), (float) FancyBags.getInstance().getConfig().getDouble("pitchLevelOfBackpacks"));
 				
 				Inventory data = Utils.inventoryFromBase64(FancyBags.getVersionHandler().getInventoryTag(e.getItem()));
 				Inventory gui = Bukkit.createInventory(data.getHolder(), data.getSize(),

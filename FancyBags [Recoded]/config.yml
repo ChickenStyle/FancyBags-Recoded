@@ -6,7 +6,12 @@ messages:
   #The disableCraft runs when player tries to craft the backpack
   #while holding shift.
   #Made this to prevent duping items.
-  
+
+putBackpacksIntoShulkers: false
+
+soundLevelOfBackpacks: 0.5
+pitchLevelOfBackpacks: 1
+
 slotsLimit: '&cSlots Limit!'
 
 showContents: true

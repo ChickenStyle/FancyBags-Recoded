@@ -35,6 +35,7 @@ public class ClickInventoryEvent implements Listener{
 	@EventHandler
 	public void onClickInventory(InventoryClickEvent e) {
 		if (e.getInventory() == null) return;
+		
 		Player player = (Player) e.getWhoClicked();
 		if (e.getView().getTopInventory().getHolder() instanceof BackpackHolder) {
 			
@@ -65,11 +66,10 @@ public class ClickInventoryEvent implements Listener{
 											break;
 										}
 									}
+								}
+							}
 
-							  }
-						}
-						
-						if (pack.getReject().getType().equals(RejectType.WHITELIST)) {
+							if (pack.getReject().getType().equals(RejectType.WHITELIST)) {
 								boolean contains = false;
 								for (ItemStack item:pack.getReject().getItems()) {
 									if (isSimilar(item,e.getCurrentItem())) {

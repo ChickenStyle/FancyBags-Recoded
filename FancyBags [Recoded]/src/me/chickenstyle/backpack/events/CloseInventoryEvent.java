@@ -128,6 +128,7 @@ public class CloseInventoryEvent implements Listener{
 				}
 				backpack.setItemMeta(meta);
 				e.getPlayer().setItemInHand(backpack);
+				player.playSound(player.getLocation(), Utils.getVersionChestCloseSound(), (float) FancyBags.getInstance().getConfig().getDouble("soundLevelOfBackpacks"), (float) FancyBags.getInstance().getConfig().getDouble("pitchLevelOfBackpacks"));
 				Bukkit.getPluginManager().callEvent(new BackpackCloseEvent(player, e.getView().getTopInventory()));				
 			} else {
 				RightClickEvent.duped.remove(e.getPlayer().getUniqueId());

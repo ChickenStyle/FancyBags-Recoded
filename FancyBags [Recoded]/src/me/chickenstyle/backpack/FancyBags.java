@@ -98,6 +98,7 @@ public class FancyBags extends JavaPlugin implements Listener{
 		
 		//Loads command
 		getCommand("fancybags").setExecutor(new BackpackCommand());
+		getCommand("fancybags").setTabCompleter(new FancyTab());
 		getServer().getConsoleSender().sendMessage("FancyBags plugin has been enabled!");
 	}
 	

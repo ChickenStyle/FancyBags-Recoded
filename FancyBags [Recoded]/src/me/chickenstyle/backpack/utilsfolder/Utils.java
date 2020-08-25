@@ -147,12 +147,22 @@ public class Utils {
         return glass;
     }
     
-    public static Sound getVersionChestSound() {
+    public static Sound getVersionChestOpenSound() {
     	Sound glass = null;
         if (Bukkit.getVersion().contains("1.8")) {
         	glass = Sound.valueOf("CHEST_OPEN");
         } else {
         	glass = Sound.valueOf("BLOCK_CHEST_OPEN");
+        }
+        return glass;
+    }
+    
+    public static Sound getVersionChestCloseSound() {
+    	Sound glass = null;
+        if (Bukkit.getVersion().contains("1.8")) {
+        	glass = Sound.valueOf("CHEST_CLOSE");
+        } else {
+        	glass = Sound.valueOf("BLOCK_CHEST_CLOSE");
         }
         return glass;
     }
