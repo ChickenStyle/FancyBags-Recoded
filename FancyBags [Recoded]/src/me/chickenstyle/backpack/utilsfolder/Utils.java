@@ -43,7 +43,7 @@ public class Utils {
 				text = text.replace(color, net.md_5.bungee.api.ChatColor.of(color) + "");
 			}
 		}
-
+		
 		return ChatColor.translateAlternateColorCodes('&', text);
 	}
 	
@@ -202,7 +202,8 @@ public class Utils {
     	return null;
     }
     
-    public static ItemStack createBackPack(String name,String texture,int slotsAmount,int id) {
+    @SuppressWarnings("unchecked")
+	public static ItemStack createBackPack(String name,String texture,int slotsAmount,int id) {
     	ItemStack item = null;
     	
     	if (slotsAmount >= 0 && slotsAmount <= 9) {
@@ -235,8 +236,12 @@ public class Utils {
     	}
     	
 		ArrayList<String> lore = new ArrayList<String>();
-		lore.add(Utils.color("&7A special portable bag with"));
-		lore.add(Utils.color("&6" + slotsAmount  +" &7slots!"));
+		
+		
+		for (String line:(ArrayList<String>) FancyBags.getInstance().getConfig().get("backpackLore")) {
+			lore.add(Utils.color(line.replace("{slotsAmount}", slotsAmount + "")));
+		}
+		
 		lore.add(" ");
 		lore.add(Utils.color(FancyBags.getInstance().getConfig().getString("emptyBackpack")));
 		lore.add(" ");
@@ -250,7 +255,8 @@ public class Utils {
 
     }
     
-    public static ItemStack createBackPack(Backpack pack) {
+    @SuppressWarnings("unchecked")
+	public static ItemStack createBackPack(Backpack pack) {
     	ItemStack item = null;
     	if (pack.getSlotsAmount() >= 0 && pack.getSlotsAmount() <= 9) {
     		item = FancyBags.getVersionHandler().addInventoryTag(createCustomSkull(pack.getName(), pack.getTexture()),
@@ -282,8 +288,12 @@ public class Utils {
     	}
     	
 		ArrayList<String> lore = new ArrayList<String>();
-		lore.add(Utils.color("&7A special portable bag with"));
-		lore.add(Utils.color("&6" + pack.getSlotsAmount()  +" &7slots!"));
+		
+		
+		for (String line:(ArrayList<String>) FancyBags.getInstance().getConfig().get("backpackLore")) {
+			lore.add(Utils.color(line.replace("{slotsAmount}", pack.getSlotsAmount() + "")));
+		}
+		
 		lore.add(" ");
 		lore.add(Utils.color(FancyBags.getInstance().getConfig().getString("emptyBackpack")));
 		lore.add(" ");

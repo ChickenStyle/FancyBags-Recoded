@@ -16,6 +16,11 @@ slotsLimit: '&cSlots Limit!'
 
 showContents: true
 
+backpackLore:
+- '&7A special portable bag with'
+- '&6{slotsAmount} &7slots!'
+
+
 emptyBackpack: '&cBackpack is empty!'
 
 displayItemInLore: '&a{number}x {item_name}'

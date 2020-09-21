@@ -70,4 +70,5 @@ public class Handler_1_8_R3 implements NMSHandler{
 		NBTTagCompound itemCompound = (nmsItem.hasTag()) ? nmsItem.getTag() : new NBTTagCompound();
 		return itemCompound.getInt("BackpackID");
 	}
+
 }
