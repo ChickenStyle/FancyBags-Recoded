@@ -21,7 +21,7 @@ import me.chickenstyle.backpack.customholders.RejectItemsHolder;
 import me.chickenstyle.backpack.utilsfolder.Utils;
 
 public class CloseInventoryEvent implements Listener{
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@EventHandler
 	public void onCloseInventory(InventoryCloseEvent e) {
 		Player player = (Player) e.getPlayer();
@@ -41,8 +41,11 @@ public class CloseInventoryEvent implements Listener{
 				if (FancyBags.getInstance().getConfig().getBoolean("showContents")) {
 					int slots = FancyBags.getVersionHandler().getBackpackSize(e.getPlayer().getItemInHand());
 					ArrayList<String> lore = new ArrayList<String>();
-					lore.add(Utils.color("&7A special portable bag with"));
-					lore.add(Utils.color("&6" + slots  +" &7slots!"));
+					
+					
+					for (String line:(ArrayList<String>) FancyBags.getInstance().getConfig().get("backpackLore")) {
+						lore.add(Utils.color(line.replace("{slotsAmount}", slots + "")));
+					}
 					lore.add(" ");
 
 					if (!isEmpty(e.getView().getTopInventory())) {
