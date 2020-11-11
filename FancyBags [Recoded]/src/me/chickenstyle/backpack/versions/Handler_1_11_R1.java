@@ -15,8 +15,8 @@ public class Handler_1_11_R1 implements NMSHandler{
 	public ItemStack addRandomTag(ItemStack item) {
 		net.minecraft.server.v1_11_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound itemCompound = (nmsItem.hasTag()) ? nmsItem.getTag() : new NBTTagCompound();
-		String random = new RandomString(10).nextString();
-		itemCompound.setString(random, random);
+		String random = new RandomString(16).nextString();
+		itemCompound.setString("Random", random);
 		nmsItem.setTag(itemCompound);
 		return CraftItemStack.asBukkitCopy(nmsItem);
 	}

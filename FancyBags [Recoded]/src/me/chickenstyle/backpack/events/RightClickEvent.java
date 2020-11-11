@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
 import me.chickenstyle.backpack.FancyBags;
+import me.chickenstyle.backpack.Message;
 import me.chickenstyle.backpack.customevents.BackpackOpenEvent;
 import me.chickenstyle.backpack.utilsfolder.Utils;
 
@@ -31,39 +32,46 @@ public class RightClickEvent implements Listener{
 			
 			
 			if (FancyBags.getVersionHandler().hasInventoryTag(e.getItem())) {
+				
 				Player player = e.getPlayer();
-				e.setCancelled(true);
-				player.playSound(player.getLocation(), Utils.getVersionChestOpenSound(), (float) FancyBags.getInstance().getConfig().getDouble("soundLevelOfBackpacks"), (float) FancyBags.getInstance().getConfig().getDouble("pitchLevelOfBackpacks"));
-				
-				Inventory data = Utils.inventoryFromBase64(FancyBags.getVersionHandler().getInventoryTag(e.getItem()));
-				Inventory gui = Bukkit.createInventory(data.getHolder(), data.getSize(),
-				Utils.color(FancyBags.getVersionHandler().getBackPackTitle(e.getItem())));
-				gui.setContents(data.getContents());
-				
-				BackpackOpenEvent event = new BackpackOpenEvent(player, gui);
-				Bukkit.getPluginManager().callEvent(event);
-				
-				if (!event.isCancelled()) {
-					int slotsAmount = FancyBags.getVersionHandler().getBackpackSize(e.getItem());
-					for (int i = slotsAmount ;i < gui.getSize() ;i++) {
-						gui.setItem(i, Utils.getRedVersionGlass());
-					}
-					player.openInventory(gui);
+				if (e.getItem().getAmount() == 1) {
+					e.setCancelled(true);
+					player.playSound(player.getLocation(), Utils.getVersionChestOpenSound(), (float) FancyBags.getInstance().getConfig().getDouble("soundLevelOfBackpacks"), (float) FancyBags.getInstance().getConfig().getDouble("pitchLevelOfBackpacks"));
 					
-					int slot = e.getPlayer().getInventory().getHeldItemSlot();
-					Bukkit.getScheduler().scheduleSyncDelayedTask(FancyBags.getInstance(), () -> {
-						if (player.getItemInHand() != null && !player.getItemInHand().getType().equals(Material.AIR)) {
-							if (player.getInventory().getHeldItemSlot() != slot) {
-									duped.put(player.getUniqueId(), true);
-									player.closeInventory();
-								}
-						} else {
-							duped.put(player.getUniqueId(), true);
-							player.closeInventory();
+					Inventory data = Utils.inventoryFromBase64(FancyBags.getVersionHandler().getInventoryTag(e.getItem()));
+					Inventory gui = Bukkit.createInventory(data.getHolder(), data.getSize(),
+					Utils.color(FancyBags.getVersionHandler().getBackPackTitle(e.getItem())));
+					gui.setContents(data.getContents());
+					
+					BackpackOpenEvent event = new BackpackOpenEvent(player, gui);
+					Bukkit.getPluginManager().callEvent(event);
+					
+					if (!event.isCancelled()) {
+						int slotsAmount = FancyBags.getVersionHandler().getBackpackSize(e.getItem());
+						for (int i = slotsAmount ;i < gui.getSize() ;i++) {
+							gui.setItem(i, Utils.getRedVersionGlass());
 						}
+						player.openInventory(gui);
+						
+						int slot = e.getPlayer().getInventory().getHeldItemSlot();
+						Bukkit.getScheduler().scheduleSyncDelayedTask(FancyBags.getInstance(), () -> {
+							if (player.getItemInHand() != null && !player.getItemInHand().getType().equals(Material.AIR)) {
+								if (player.getInventory().getHeldItemSlot() != slot) {
+										duped.put(player.getUniqueId(), true);
+										player.closeInventory();
+									}
+							} else {
+								duped.put(player.getUniqueId(), true);
+								player.closeInventory();
+							}
 
-					},5);
+						},5);
+					}
+				} else {
+					e.setCancelled(true);
+					player.sendMessage(Message.CANCEL_OPEN.getMSG());
 				}
+			
 			}
 		}
 	}

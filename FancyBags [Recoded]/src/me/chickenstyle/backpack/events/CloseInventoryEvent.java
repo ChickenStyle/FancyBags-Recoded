@@ -25,10 +25,6 @@ public class CloseInventoryEvent implements Listener{
 	@EventHandler
 	public void onCloseInventory(InventoryCloseEvent e) {
 		Player player = (Player) e.getPlayer();
-
-		
-		
-		
 		if (e.getInventory().getHolder() instanceof BackpackHolder) {
 			if (!RightClickEvent.duped.containsKey(e.getPlayer().getUniqueId())) {
 				ItemStack backpack = FancyBags.getVersionHandler().addInventoryTag(
@@ -37,6 +33,7 @@ public class CloseInventoryEvent implements Listener{
 						, FancyBags.getVersionHandler().getBackpackSize(e.getPlayer().getItemInHand())
 						, e.getView().getTitle(),
 						FancyBags.getVersionHandler().getBackpackID(e.getPlayer().getItemInHand()));
+				backpack = FancyBags.getVersionHandler().addRandomTag(backpack);
 				ItemMeta meta = backpack.getItemMeta();
 				if (FancyBags.getInstance().getConfig().getBoolean("showContents")) {
 					int slots = FancyBags.getVersionHandler().getBackpackSize(e.getPlayer().getItemInHand());
