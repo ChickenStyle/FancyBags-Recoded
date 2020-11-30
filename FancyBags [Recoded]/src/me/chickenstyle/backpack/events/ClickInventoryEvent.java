@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,11 +38,29 @@ public class ClickInventoryEvent implements Listener{
 		if (e.getInventory() == null) return;
 		
 		Player player = (Player) e.getWhoClicked();
+		
+		if (e.getInventory().getType().equals(InventoryType.HOPPER) || e.getInventory().getType().equals(InventoryType.SHULKER_BOX)) {
+			
+			
+			if (FancyBags.getInstance().getConfig().getBoolean("putBackpacksIntoShulkers") == false) {
+				
+				if (e.getClick().equals(ClickType.NUMBER_KEY)) {
+					e.setCancelled(true);
+				}
+				
+				if (e.getCurrentItem() == null || e.getCurrentItem().getType().equals(Material.AIR)) {return;}
+				if (FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
+					e.setCancelled(true);
+					return;
+				}
+			}
+
+		}
+		
+		
+		
 		if (e.getView().getTopInventory().getHolder() instanceof BackpackHolder) {
 			
-			if (e.getClick().equals(ClickType.NUMBER_KEY)) {
-				e.setCancelled(true);
-			}
 			
 			if (e.getCurrentItem() == null || e.getCurrentItem().getType().equals(Material.AIR)) {return;}
 			
@@ -248,8 +267,7 @@ public class ClickInventoryEvent implements Listener{
 				}
 			}
 		}
-		
-
+	  
 	}
 	
 	@SuppressWarnings("deprecation")

@@ -3,7 +3,7 @@ messages:
   disablePlace: "&4You cannot place this item in backpack!"
   disableCraft: "&4You cannot craft the backpack this way!"
   giveMessage: "&6{player} &agave you &6{backpack}"
-  disableOpen: "&4You cannot opened stacked backpacks!"
+  cancelOpen: "&4You cannot open stacked backpacks!"
   #The disableCraft runs when player tries to craft the backpack
   #while holding shift.
   #Made this to prevent duping items.
