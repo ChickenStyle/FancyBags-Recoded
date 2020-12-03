@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -305,6 +306,148 @@ public class Utils {
     	return item;
     }
     
+    
+    @SuppressWarnings({ "unchecked", "deprecation" })
+	public static ArrayList<String> loadLoreBackpack(Player player) {
+    	int slots = FancyBags.getVersionHandler().getBackpackSize(player.getItemInHand());
+		ArrayList<String> lore = new ArrayList<String>();
+		
+		
+		for (String line:(ArrayList<String>) FancyBags.getInstance().getConfig().get("backpackLore")) {
+			lore.add(Utils.color(line.replace("{slotsAmount}", slots + "")));
+		}
+		lore.add(" ");
 
+		if (!isEmpty(player.getOpenInventory().getTopInventory())) {
+			
+			//Count and sort all the items in the backpack
+			ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+			for (ItemStack item:player.getOpenInventory().getTopInventory().getContents()) {
+				if (item != null && item.getType() != Material.AIR && !item.equals(Utils.getRedVersionGlass())) {
+					
+					if (!items.isEmpty()) {
+						boolean similar = false;
+						for (ItemStack checkedItem:items) {
+							if (item.isSimilar(checkedItem)) {
+								checkedItem.setAmount(checkedItem.getAmount() + item.getAmount());
+								similar = true;
+							}
+						}
+						
+						if (!similar) {
+							items.add(item);
+						}
+						
+					} else {
+						items.add(item);
+					}
+				}
+			}
+			
+			if (items.size() != 0) {
+				if (!(items.size() > 5)) {
+					for (ItemStack item:items) {
+						String structure = FancyBags.getInstance().getConfig().getString("displayItemInLore");
+						structure = structure.replace("{number}", item.getAmount() + "");
+						
+						if (item.getItemMeta().hasDisplayName()) {
+							structure = structure.replace("{item_name}", item.getItemMeta().getDisplayName());
+						} else {
+							structure = structure.replace("{item_name}", "&f" + getName(item.getType()));
+						}
+						
+						lore.add(Utils.color(structure));
+					}
+				} else {
+					for (int i = 0; i < 5;i++) {
+						ItemStack item = items.get(i);
+						String structure = FancyBags.getInstance().getConfig().getString("displayItemInLore");
+						structure = structure.replace("{number}", item.getAmount() + "");
+						
+						if (item.getItemMeta().hasDisplayName()) {
+							structure = structure.replace("{item_name}", item.getItemMeta().getDisplayName());
+						} else {
+							structure = structure.replace("{item_name}", "&f" + getName(item.getType()));
+						}
+						
+						lore.add(Utils.color(structure));
+					}
+					
+					int amount = 0;
+					for (int i = 5;i < items.size();i++) {
+						amount += items.get(i).getAmount();
+					}
+					
+					String other = FancyBags.getInstance().getConfig().getString("otherItemsInLore");
+					other = other.replace("{amount}", amount + "");
+					lore.add(Utils.color(other));
+					
+				}
+			} else {
+				lore.add(Utils.color(FancyBags.getInstance().getConfig().getString("emptyBackpack")));
+			}
+			
+
+			
+			
+		} else {
+			lore.add(Utils.color(FancyBags.getInstance().getConfig().getString("emptyBackpack")));
+		}
+		
+		lore.add(" ");
+		return lore;
+    }
+    
+    @SuppressWarnings("deprecation")
+	public static ItemStack loadBackpack(Player player) {
+		ItemStack backpack = FancyBags.getVersionHandler().addInventoryTag(
+				player.getItemInHand()
+				, player.getOpenInventory().getTopInventory()
+				, FancyBags.getVersionHandler().getBackpackSize(player.getItemInHand())
+				, player.getOpenInventory().getTitle(),
+				FancyBags.getVersionHandler().getBackpackID(player.getItemInHand()));
+		backpack = FancyBags.getVersionHandler().addRandomTag(backpack);
+		ItemMeta meta = backpack.getItemMeta();
+		if (FancyBags.getInstance().getConfig().getBoolean("showContents")) {
+			meta.setLore(Utils.loadLoreBackpack(player));
+		} else {
+			meta.setLore(new ArrayList<String>());
+		}
+		backpack.setItemMeta(meta);
+		return backpack;
+    }
+    
+	private static String getName(Material mat) {
+		String name = mat.name().replace('_',' ').toLowerCase();
+		String[] data = name.split("");
+		
+		for (int i = 0;i < data.length;i++) {
+			if (i != 0) {
+				if (data[i - 1].equals(" ")) {
+					data[i] = data[i].toUpperCase();
+				}
+			} else {
+				data[i] = data[i].toUpperCase();
+			}
+		}
+		
+		name = arrayToString(data);
+		return name;
+	}
+	
+	private static boolean isEmpty(Inventory inv) {
+		for(ItemStack it : inv.getContents()) {
+		    if(it != null) return false;
+		}
+		return true;
+	}
+	
+	private static String arrayToString(String[] arr) {
+		String str = "";
+		for (String chr:arr) {
+			str = str + chr;
+		}
+		return str;
+	}
     
 }
