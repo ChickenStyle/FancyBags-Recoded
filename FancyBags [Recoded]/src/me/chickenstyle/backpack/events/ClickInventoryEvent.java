@@ -60,7 +60,10 @@ public class ClickInventoryEvent implements Listener{
 		
 		
 		if (e.getView().getTopInventory().getHolder() instanceof BackpackHolder) {
-			
+			if (e.getClick().equals(ClickType.NUMBER_KEY) || e.getClick().equals(ClickType.UNKNOWN)) {
+				e.setCancelled(true);
+				return;
+			}
 			
 			if (e.getCurrentItem() == null || e.getCurrentItem().getType().equals(Material.AIR)) {return;}
 			
