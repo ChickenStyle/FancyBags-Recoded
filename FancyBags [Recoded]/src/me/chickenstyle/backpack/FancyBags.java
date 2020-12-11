@@ -23,6 +23,7 @@ import me.chickenstyle.backpack.events.ClickInventoryEvent;
 import me.chickenstyle.backpack.events.CloseInventoryEvent;
 import me.chickenstyle.backpack.events.CraftEvent;
 import me.chickenstyle.backpack.events.DeathPlayerEvent;
+import me.chickenstyle.backpack.events.PickupItemEvent;
 import me.chickenstyle.backpack.events.RightClickEvent;
 import me.chickenstyle.backpack.utilsfolder.Utils;
 import me.chickenstyle.backpack.versions.Handler_1_10_R1;
@@ -244,6 +245,7 @@ public class FancyBags extends JavaPlugin implements Listener{
 		Bukkit.getPluginManager().registerEvents(new ClickInventoryEvent(), this);
 		Bukkit.getPluginManager().registerEvents(new CraftEvent(),this);
 		Bukkit.getPluginManager().registerEvents(new DeathPlayerEvent(), this);
+		Bukkit.getPluginManager().registerEvents(new PickupItemEvent(), this);
 	}
 	
 	public void loadRecipes() {
