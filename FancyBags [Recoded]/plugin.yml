@@ -1,6 +1,6 @@
 main: me.chickenstyle.backpack.FancyBags
 name: FancyBags
-version: 1.7.6
+version: 1.7.7
 description: implements cool backpacks to the game 
 api-version: 1.13
 softdepend: [CraftBook]

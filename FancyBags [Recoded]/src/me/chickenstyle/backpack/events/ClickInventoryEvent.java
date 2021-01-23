@@ -39,23 +39,46 @@ public class ClickInventoryEvent implements Listener{
 		
 		Player player = (Player) e.getWhoClicked();
 		
-		if (e.getInventory().getType().equals(InventoryType.HOPPER) || e.getInventory().getType().equals(InventoryType.SHULKER_BOX)) {
-			
-			
-			if (FancyBags.getInstance().getConfig().getBoolean("putBackpacksIntoShulkers") == false) {
-				
-				if (e.getClick().equals(ClickType.NUMBER_KEY)) {
-					e.setCancelled(true);
-				}
-				
-				if (e.getCurrentItem() == null || e.getCurrentItem().getType().equals(Material.AIR)) {return;}
-				if (FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
-					e.setCancelled(true);
-					return;
-				}
-			}
+		String ver = Bukkit.getServer().getVersion();
 
+		if (ver.contains("1.8") || ver.contains("1.9") || ver.contains("1.10")) {
+			
+			if (e.getInventory().getType().equals(InventoryType.HOPPER)) {
+				if (FancyBags.getInstance().getConfig().getBoolean("putBackpacksIntoShulkers") == false) {
+					
+					if (e.getClick().equals(ClickType.NUMBER_KEY)) {
+						e.setCancelled(true);
+					}
+					
+					if (e.getCurrentItem() == null || e.getCurrentItem().getType().equals(Material.AIR)) {return;}
+					if (FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
+						e.setCancelled(true);
+						return;
+					}
+				}
+
+			}
+			
+		} else {
+			
+			if (e.getInventory().getType().equals(InventoryType.HOPPER) || e.getInventory().getType().equals(InventoryType.SHULKER_BOX)) {
+				if (FancyBags.getInstance().getConfig().getBoolean("putBackpacksIntoShulkers") == false) {
+					
+					if (e.getClick().equals(ClickType.NUMBER_KEY)) {
+						e.setCancelled(true);
+					}
+					
+					if (e.getCurrentItem() == null || e.getCurrentItem().getType().equals(Material.AIR)) {return;}
+					if (FancyBags.getVersionHandler().hasInventoryTag(e.getCurrentItem())) {
+						e.setCancelled(true);
+						return;
+					}
+				}
+
+			}
+			
 		}
+			
 		
 		
 		
